@@ -112,3 +112,30 @@ def process_gpx(file_path):
         print(f"Средняя скорость: {average_speed:.2f} м/с")
         print(f"Максимальная скорость: {max(speeds):.2f} м/с")
         print(f"Минимальная скорость: {min(speeds):.2f} м/с")
+
+    # Построение графиков
+    plt.figure(figsize=(12, 6))
+    plt.subplot(1, 2, 1)
+    plt.plot([p[1] for p in points], [p[0] for p in points], label="Маршрут")
+    plt.xlabel("Долгота")
+    plt.ylabel("Широта")
+    plt.title("Карта маршрута")
+    plt.legend()
+
+    plt.subplot(1, 2, 2)
+    plt.plot(range(len(elevations)), elevations, label="Высота")
+    plt.xlabel("Точка")
+    plt.ylabel("Высота (м)")
+    plt.title("Профиль высоты")
+    plt.legend()
+
+    plt.tight_layout()
+    plt.show()
+
+# Основной запуск
+if __name__ == "__main__":
+    file_path = select_file()
+    if file_path:
+        process_gpx(file_path)
+    else:
+        print("Файл не выбран.")
