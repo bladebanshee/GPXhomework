@@ -97,3 +97,18 @@ def process_gpx(file_path):
                 previous_point = point
                 points.append((point.latitude, point.longitude))
                 elevations.append(point.elevation or 0)
+                # Вывод результатов
+    print(f"Файл: {file_path}")
+    print(f"Общее расстояние (геодезическое): {total_distance_geodesic:.2f} м")
+    print(f"Общее расстояние (большой круг): {total_distance_great_circle:.2f} м")
+    print(f"Общее расстояние (гаверсинус): {total_distance_haversine:.2f} м")
+    print(f"Общий подъем: {total_elevation_gain:.2f} м")
+    print(f"Общий спуск: {total_elevation_loss:.2f} м")
+
+    if times:
+        total_time = sum(times)
+        average_speed = sum(speeds) / len(speeds)
+        print(f"Общее время: {total_time:.2f} сек")
+        print(f"Средняя скорость: {average_speed:.2f} м/с")
+        print(f"Максимальная скорость: {max(speeds):.2f} м/с")
+        print(f"Минимальная скорость: {min(speeds):.2f} м/с")
