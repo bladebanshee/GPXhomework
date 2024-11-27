@@ -7,6 +7,7 @@ import gpxpy
 import gpxpy.gpx
 from geopy.distance import geodesic
 import matplotlib.pyplot as plt
+
 # Функция для выбора файла через tkinter
 def select_file():
     root = tk.Tk()
@@ -85,7 +86,7 @@ def process_gpx(file_path):
                     else:
                         total_elevation_loss -= elevation_diff
 
-                    # Учет времени
+                    # Учет времени и скоростей
                     if previous_point.time and point.time:
                         time_diff = (point.time - previous_point.time).total_seconds()
                         if time_diff > 0:
@@ -97,7 +98,8 @@ def process_gpx(file_path):
                 previous_point = point
                 points.append((point.latitude, point.longitude))
                 elevations.append(point.elevation or 0)
-                # Вывод результатов
+
+    # Вывод результатов
     print(f"Файл: {file_path}")
     print(f"Общее расстояние (геодезическое): {total_distance_geodesic:.2f} м")
     print(f"Общее расстояние (большой круг): {total_distance_great_circle:.2f} м")
@@ -112,6 +114,8 @@ def process_gpx(file_path):
         print(f"Средняя скорость: {average_speed:.2f} м/с")
         print(f"Максимальная скорость: {max(speeds):.2f} м/с")
         print(f"Минимальная скорость: {min(speeds):.2f} м/с")
+    else:
+        print("Нет данных для расчета скорости.")
 
     # Построение графиков
     plt.figure(figsize=(12, 6))
