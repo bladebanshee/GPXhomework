@@ -55,6 +55,7 @@ def process_gpx(file_path):
     total_elevation_loss = 0
     times = []
     speeds = []
+    segment_times = []  # Список для времени на каждом участке
 
     points = []
     elevations = []
@@ -94,6 +95,7 @@ def process_gpx(file_path):
                                              (point.latitude, point.longitude)).meters / time_diff
                             speeds.append(speed)
                             times.append(time_diff)
+                            segment_times.append(time_diff)  # Время на текущем участке
 
                 previous_point = point
                 points.append((point.latitude, point.longitude))
@@ -114,23 +116,37 @@ def process_gpx(file_path):
         print(f"Средняя скорость: {average_speed:.2f} м/с")
         print(f"Максимальная скорость: {max(speeds):.2f} м/с")
         print(f"Минимальная скорость: {min(speeds):.2f} м/с")
+        print("\nВремя на каждом участке:")
+        for i, segment_time in enumerate(segment_times, 1):
+            print(f"Участок {i}: {segment_time:.2f} сек")
     else:
         print("Нет данных для расчета скорости.")
 
     # Построение графиков
-    plt.figure(figsize=(12, 6))
-    plt.subplot(1, 2, 1)
+    plt.figure(figsize=(16, 8))
+    
+    # График маршрута
+    plt.subplot(1, 3, 1)
     plt.plot([p[1] for p in points], [p[0] for p in points], label="Маршрут")
     plt.xlabel("Долгота")
     plt.ylabel("Широта")
     plt.title("Карта маршрута")
     plt.legend()
 
-    plt.subplot(1, 2, 2)
+    # График высоты
+    plt.subplot(1, 3, 2)
     plt.plot(range(len(elevations)), elevations, label="Высота")
     plt.xlabel("Точка")
     plt.ylabel("Высота (м)")
     plt.title("Профиль высоты")
+    plt.legend()
+
+    # График времени на участке
+    plt.subplot(1, 3, 3)
+    plt.bar(range(1, len(segment_times) + 1), segment_times, label="Время на участке", color="orange")
+    plt.xlabel("Участок")
+    plt.ylabel("Время (с)")
+    plt.title("Время на каждом участке")
     plt.legend()
 
     plt.tight_layout()
